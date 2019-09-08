@@ -18,7 +18,7 @@ const colors = {
 /* Create a diagram object that includes the world (model) and the svg
    elements (view) */
 function makeDiagram(selector) {
-    let diagram = {}, world = new World(2);
+    let diagram = {}, world = new World(4);
     diagram.world = world;
     diagram.xPosition = (floorNumber) => 150 + floorNumber * 600 / diagram.world.floors.length;
 
@@ -94,8 +94,11 @@ function makeAgentControlledDiagram() {
 
     function update() {
         let location = diagram.world.location;
+        console.log(location)
         let percept = diagram.world.floors[location].dirty;
+        console.log(percept)
         let action = reflexVacuumAgent(diagram.world);
+        console.log(action)
         diagram.world.simulate(action);
         renderWorld(diagram);
         renderAgentPercept(diagram, percept);
@@ -187,20 +190,20 @@ function makeTableControlledDiagram() {
     let diagram = makeDiagram('#table-controlled-diagram svg');
 
     function update() {
-        let table = getRulesFromPage();
+        //let table = getRulesFromPage();
         let location = diagram.world.location;
         let percept = diagram.world.floors[location].dirty;
-        let action = tableVacuumAgent(diagram.world, table);
-        diagram.world.simulate(action);
+        //let action = tableVacuumAgent(diagram.world, table);
+        //diagram.world.simulate(action);
         renderWorld(diagram);
         renderAgentPercept(diagram, percept);
-        renderAgentAction(diagram, action);
-        showPerceptAndAction(location, percept, action);
+        //renderAgentAction(diagram, action);
+        //showPerceptAndAction(location, percept, action);
     }
     update();
     setInterval(update, STEP_TIME_MS);
     
-    function getRulesFromPage() {
+    /*function getRulesFromPage() {
         let table = d3.select("#table-controlled-diagram table");
         let left_clean = table.select("[data-action=left-clean] select").node().value;
         let left_dirty = table.select("[data-action=left-dirty] select").node().value;
@@ -208,6 +211,7 @@ function makeTableControlledDiagram() {
         let right_dirty = table.select("[data-action=right-dirty] select").node().value;
         return [[left_clean, left_dirty], [right_clean, right_dirty]];
     }
+    */
 
     function showPerceptAndAction(location, percept, action) {
         let locationMarker = location? 'right' : 'left';
