@@ -96,7 +96,7 @@ function renderAgentAction(diagram, action) {
    action, simulate the action in the world, and draw the action on
    the page. */
 
-const STEP_TIME_MS = 2500;
+const STEP_TIME_MS = 3000;
 function makeAgentControlledDiagram() {
     let diagram = makeDiagram('#agent-controlled-diagram svg');
 

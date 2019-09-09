@@ -39,11 +39,11 @@ class World {
                 this.location = 1;
             break;
         case 'DOWN':
-        if(this.location == 0)
-            this.location = 2;
-        else if(this.location == 1)
-            this.location = 3;
-        break;
+            if(this.location == 0)
+                this.location = 2;
+            else if(this.location == 1)
+                this.location = 3;
+            break;
         }
 
         return action;
@@ -54,10 +54,30 @@ class World {
 // Rules are defined in code
 function reflexVacuumAgent(world) {
     if (world.floors[world.location].dirty) { return 'SUCK'; }
-    else if (world.location == 0)           { return 'RIGHT'; }
-    else if (world.location == 1)           { return 'DOWN'; }
-    else if (world.location == 2)           { return 'UP'; }
-    else if (world.location == 3)           { return 'LEFT'; }
+    else if (world.location == 0){ 
+        if(world.floors[2].dirty) {
+            return 'DOWN';
+        }
+        return 'RIGHT';
+    }
+    else if (world.location == 1){
+        if(world.floors[0].dirty) {
+            return 'LEFT'
+        }
+        return 'DOWN'; 
+    }
+    else if (world.location == 2){ 
+        if(world.floors[3].dirty) {
+           return 'RIGHT'; 
+        }
+        return 'UP';
+    }
+    else if (world.location == 3){ 
+        if(world.floors[1].dirty) {
+            return 'UP';
+        }
+        return 'LEFT';
+    }
 }
 
 // Rules are defined in data, in a table indexed by [location][dirty]
