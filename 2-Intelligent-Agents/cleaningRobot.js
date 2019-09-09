@@ -5,7 +5,7 @@ class World {
         this.location = 0;
         this.floors = [];
         for (let i = 0; i < numFloors; i++) {
-            this.floors.push({dirty: false});
+            this.floors.push({dirty: false, wet: false});
         }
     }
 
@@ -13,12 +13,17 @@ class World {
         this.floors[floorNumber].dirty = true;
     }
 
+    markFloorWet(floorNumber) {
+        this.floors[floorNumber].wet = true;
+    }
+
     simulate(action) {
-        console.log("ACTION", action)
-        console.log("LOCATION", location)
         switch(action) {
         case 'SUCK':
             this.floors[this.location].dirty = false;
+            break;
+        case 'DRY':
+            this.floors[this.location].wet = false;
             break;
         case 'LEFT':
             if(this.location == 1)
@@ -54,35 +59,29 @@ class World {
 // Rules are defined in code
 function reflexVacuumAgent(world) {
     if (world.floors[world.location].dirty) { return 'SUCK'; }
+    else if(world.floors[world.location].wet) {return 'DRY';}
     else if (world.location == 0){ 
-        if(world.floors[2].dirty) {
+        if(world.floors[2].dirty || world.floors[2].wet) {
             return 'DOWN';
         }
         return 'RIGHT';
     }
     else if (world.location == 1){
-        if(world.floors[0].dirty) {
+        if(world.floors[0].dirty || world.floors[0].wet) {
             return 'LEFT'
         }
         return 'DOWN'; 
     }
     else if (world.location == 2){ 
-        if(world.floors[3].dirty) {
+        if(world.floors[3].dirty || world.floors[3].wet) {
            return 'RIGHT'; 
         }
         return 'UP';
     }
     else if (world.location == 3){ 
-        if(world.floors[1].dirty) {
+        if(world.floors[1].dirty || world.floors[1].wet) {
             return 'UP';
         }
         return 'LEFT';
     }
-}
-
-// Rules are defined in data, in a table indexed by [location][dirty]
-function tableVacuumAgent(world, table) {
-    let location = world.location;
-    let dirty = world.floors[location].dirty ? 1 : 0;
-    return table[location][dirty];
 }

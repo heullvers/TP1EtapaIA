@@ -58,8 +58,17 @@ function makeDiagram(selector) {
             .attr('height', SIZE/4)
             .attr('stroke', 'black')
             .on('click', function() {
-                world.markFloorDirty(floorNumber);
-                diagram.floors[floorNumber].attr('class', 'dirty floor');
+                let min = Math.ceil(0);
+                let max = Math.floor(1);
+                let random =  Math.floor(Math.random() * (max - min + 1)) + min;
+                if(!random){
+                    world.markFloorDirty(floorNumber);
+                    diagram.floors[floorNumber].attr('class', 'dirty floor');
+                }
+                else{
+                    world.markFloorWet(floorNumber);
+                    diagram.floors[floorNumber].attr('class', 'wet floor');
+                }
             });
     }
     return diagram;
@@ -76,17 +85,24 @@ function makeDiagram(selector) {
 function renderWorld(diagram) {
     for (let floorNumber = 0; floorNumber < diagram.world.floors.length; floorNumber++) {
         diagram.floors[floorNumber].attr('class', diagram.world.floors[floorNumber].dirty? 'dirty floor' : 'clean floor');
+        if(!diagram.world.floors[floorNumber].dirty)
+            diagram.floors[floorNumber].attr('class', diagram.world.floors[floorNumber].wet? 'wet floor' : 'clean floor');
     }
     diagram.robot.style('transform', `translate(${diagram.xPosition(diagram.world.location)}px,${diagram.yPosition(diagram.world.location) - 110}px`);
 }
 
-function renderAgentPercept(diagram, dirty) {
+function renderAgentPercept(diagram, dirty, wet) {
     let perceptLabel = {false: "It's clean", true: "It's dirty"}[dirty];
+
+    if(perceptLabel == "It's clean"){
+        perceptLabel = {false: "It's clean", true: "It's wet"}[wet];
+    }
+
     diagram.perceptText.text(perceptLabel);
 }
 // adicionar UP e DOWN
 function renderAgentAction(diagram, action) {
-    let actionLabel = {null: 'Waiting', 'SUCK': 'Vacuuming', 'LEFT': 'Going left', 'RIGHT': 'Going right', 'UP': 'Going up', 'DOWN': 'Going down'}[action];
+    let actionLabel = {null: 'Waiting', 'SUCK': 'Vacuuming', 'DRY': 'Drying','LEFT': 'Going left', 'RIGHT': 'Going right', 'UP': 'Going up', 'DOWN': 'Going down'}[action];
     diagram.actionText.text(actionLabel);
 }
 
@@ -103,12 +119,13 @@ function makeAgentControlledDiagram() {
     function update() {
         let location = diagram.world.location;
         let percept = diagram.world.floors[location].dirty;
-        console.log("PERCEPT", percept)
+        let perceptw = diagram.world.floors[location].wet;
+
         let action = reflexVacuumAgent(diagram.world);
         //TESTAR PASSANDO O LOCATION NO PARAMETRO DO SIMULATE
         diagram.world.simulate(action);
         renderWorld(diagram);
-        renderAgentPercept(diagram, percept);
+        renderAgentPercept(diagram, percept, perceptw);
         renderAgentAction(diagram, action);
     }
     update();
@@ -170,10 +187,11 @@ function makeReaderControlledDiagram() {
     
     function update() {
         let percept = diagram.world.floors[diagram.world.location].dirty;
+        let perceptw = diagram.world.floors[diagram.world.location].wet;
         if (nextAction !== null) {
             diagram.world.simulate(nextAction);
             renderWorld(diagram);
-            renderAgentPercept(diagram, percept);
+            renderAgentPercept(diagram, percept, perceptw);
             renderAgentAction(diagram, nextAction);
             nextAction = null;
             updateButtons();
@@ -181,7 +199,7 @@ function makeReaderControlledDiagram() {
         } else {
             animating = false;
             renderWorld(diagram);
-            renderAgentPercept(diagram, percept);
+            renderAgentPercept(diagram, percept, perceptw);
             renderAgentAction(diagram, null);
         }
     }
@@ -200,26 +218,15 @@ function makeTableControlledDiagram() {
         //let table = getRulesFromPage();
         let location = diagram.world.location;
         let percept = diagram.world.floors[location].dirty;
-        //let action = tableVacuumAgent(diagram.world, table);
-        //diagram.world.simulate(action);
+        let perceptw = diagram.world.floors[location].wet;
+
         renderWorld(diagram);
-        renderAgentPercept(diagram, percept);
-        //renderAgentAction(diagram, action);
-        //showPerceptAndAction(location, percept, action);
+        renderAgentPercept(diagram, percept, perceptw);
+
     }
     update();
     setInterval(update, STEP_TIME_MS);
-    
-    /*function getRulesFromPage() {
-        let table = d3.select("#table-controlled-diagram table");
-        let left_clean = table.select("[data-action=left-clean] select").node().value;
-        let left_dirty = table.select("[data-action=left-dirty] select").node().value;
-        let right_clean = table.select("[data-action=right-clean] select").node().value;
-        let right_dirty = table.select("[data-action=right-dirty] select").node().value;
-        return [[left_clean, left_dirty], [right_clean, right_dirty]];
-    }
-    */
-// ------------------------------AQUIIIIIIIIIIIIIIIIIII---------------------------
+
     function showPerceptAndAction(location, percept, action) {
         let locationMarker = location? 'right' : 'left';
         let perceptMarker = percept? 'dirty' : 'clean';
