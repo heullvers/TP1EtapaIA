@@ -86,7 +86,7 @@ function renderAgentPercept(diagram, dirty) {
 }
 // adicionar UP e DOWN
 function renderAgentAction(diagram, action) {
-    let actionLabel = {null: 'Waiting', 'SUCK': 'Vacuuming', 'LEFT': 'Going left', 'RIGHT': 'Going right'}[action];
+    let actionLabel = {null: 'Waiting', 'SUCK': 'Vacuuming', 'LEFT': 'Going left', 'RIGHT': 'Going right', 'UP': 'Going up', 'DOWN': 'Going down'}[action];
     diagram.actionText.text(actionLabel);
 }
 
