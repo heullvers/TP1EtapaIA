@@ -20,7 +20,7 @@ const colors = {
 function makeDiagram(selector) {
     let diagram = {}, world = new World(4);
     diagram.world = world;
-    diagram.xPosition = (floorNumber) => 250 + (floorNumber%2 ) * 750 / (diagram.world.floors.length);
+    diagram.xPosition = (floorNumber) => 250 + (floorNumber%2) * 750 / (diagram.world.floors.length);
     diagram.yPosition = (floorNumber) => {
         if (floorNumber < 2) {
             return 210;
@@ -77,14 +77,14 @@ function renderWorld(diagram) {
     for (let floorNumber = 0; floorNumber < diagram.world.floors.length; floorNumber++) {
         diagram.floors[floorNumber].attr('class', diagram.world.floors[floorNumber].dirty? 'dirty floor' : 'clean floor');
     }
-    diagram.robot.style('transform', `translate(${diagram.xPosition(diagram.world.location)}px,${diagram.yPosition(diagram.world.location) - 110}px)`);
+    diagram.robot.style('transform', `translate(${diagram.xPosition(diagram.world.location)}px,${diagram.yPosition(diagram.world.location) - 110}px`);
 }
 
 function renderAgentPercept(diagram, dirty) {
     let perceptLabel = {false: "It's clean", true: "It's dirty"}[dirty];
     diagram.perceptText.text(perceptLabel);
 }
-
+// adicionar UP e DOWN
 function renderAgentAction(diagram, action) {
     let actionLabel = {null: 'Waiting', 'SUCK': 'Vacuuming', 'LEFT': 'Going left', 'RIGHT': 'Going right'}[action];
     diagram.actionText.text(actionLabel);
@@ -106,7 +106,7 @@ function makeAgentControlledDiagram() {
         console.log("PERCEPT", percept)
         let action = reflexVacuumAgent(diagram.world);
         //TESTAR PASSANDO O LOCATION NO PARAMETRO DO SIMULATE
-        diagram.world.simulate(action, location);
+        diagram.world.simulate(action);
         renderWorld(diagram);
         renderAgentPercept(diagram, percept);
         renderAgentAction(diagram, action);

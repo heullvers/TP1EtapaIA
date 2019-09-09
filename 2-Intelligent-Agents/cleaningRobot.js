@@ -13,7 +13,7 @@ class World {
         this.floors[floorNumber].dirty = true;
     }
 
-    simulate(action, location) {
+    simulate(action) {
         console.log("ACTION", action)
         console.log("LOCATION", location)
         switch(action) {
@@ -21,45 +21,29 @@ class World {
             this.floors[this.location].dirty = false;
             break;
         case 'LEFT':
-            if(location == 0)
+            if(this.location == 1)
                 this.location = 0;
-            else if(location == 1)
-                this.location = 0;
-            else if(location == 2)
-                this.location = 2;
-            else 
+            else if(this.location == 3)
                 this.location = 2
             break;
         case 'RIGHT':
-            if(location == 0)
+            if(this.location == 0)
                 this.location = 1;
-            else if((location == 1))
-                this.location = 1;
-            else if(location == 2)
+            else if(this.location == 2)
                 this.location = 3;
-            else 
-                this.location = 3
             break;
         case 'UP':
-            if(location == 0)
+            if(this.location == 2)
                 this.location = 0;
-            else if(location == 1)
-                this.location = 1;
-            else if(location == 2)
-                this.location = 0;
-            else 
+            else if(this.location == 3) 
                 this.location = 1;
             break;
         case 'DOWN':
-        if(location == 0)
+        if(this.location == 0)
             this.location = 2;
-        else if(location == 1)
+        else if(this.location == 1)
             this.location = 3;
-        else if(location == 2)
-            this.location = 2;
-        else 
-            this.location = 3;
-            break;
+        break;
         }
 
         return action;
