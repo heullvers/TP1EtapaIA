@@ -41,10 +41,13 @@ function makeDiagram(selector) {
 
     diagram.floors = [];
     for (let floorNumber = 0; floorNumber < world.floors.length; floorNumber++) {
+        
+        if(floorNumber <= 1){
+        xPosition = 150 + floorNumber * 600 / (diagram.world.floors.length);
         diagram.floors[floorNumber] =
             diagram.root.append('rect')
             .attr('class', 'clean floor') // for css
-            .attr('x', diagram.xPosition(floorNumber))
+            .attr('x', xPosition)
             .attr('y', 225)
             .attr('width', SIZE)
             .attr('height', SIZE/4)
@@ -53,6 +56,23 @@ function makeDiagram(selector) {
                 world.markFloorDirty(floorNumber);
                 diagram.floors[floorNumber].attr('class', 'dirty floor');
             });
+        }
+        else{
+        xPosition = 150 + (floorNumber- 2) * 600 / (diagram.world.floors.length);
+        diagram.floors[floorNumber] =
+            diagram.root.append('rect')
+            .attr('class', 'clean floor') // for css
+            .attr('x', xPosition)
+            .attr('y', 450)
+            .attr('width', SIZE)
+            .attr('height', SIZE/4)
+            .attr('stroke', 'black')
+            .on('click', function() {
+                world.markFloorDirty(floorNumber);
+                diagram.floors[floorNumber].attr('class', 'dirty floor');
+            });
+        }
+
     }
     return diagram;
 }
@@ -95,7 +115,6 @@ function makeAgentControlledDiagram() {
     function update() {
         let location = diagram.world.location;
         let percept = diagram.world.floors[location].dirty;
-        console.log("PERCEPT", percept)
         let action = reflexVacuumAgent(diagram.world);
         //TESTAR PASSANDO O LOCATION NO PARAMETRO DO SIMULATE
         diagram.world.simulate(action, location);
