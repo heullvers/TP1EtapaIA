@@ -20,8 +20,15 @@ const colors = {
 function makeDiagram(selector) {
     let diagram = {}, world = new World(4);
     diagram.world = world;
-    diagram.xPosition = (floorNumber) => 150 + floorNumber * 600 / diagram.world.floors.length;
-
+    diagram.xPosition = (floorNumber) => 50 + (floorNumber ) * 750 / (diagram.world.floors.length);
+    diagram.yPosition = (floorNumber) => {
+        if (floorNumber < 2) {
+            return 210;
+        }
+        else {
+            return 410;
+        }
+    }
     diagram.root = d3.select(selector);
     diagram.robot = diagram.root.append('g')
         .attr('class', 'robot')
@@ -45,7 +52,7 @@ function makeDiagram(selector) {
             diagram.root.append('rect')
             .attr('class', 'clean floor') // for css
             .attr('x', diagram.xPosition(floorNumber))
-            .attr('y', 225)
+            .attr('y', diagram.yPosition(floorNumber))
             .attr('width', SIZE)
             .attr('height', SIZE/4)
             .attr('stroke', 'black')
@@ -211,7 +218,7 @@ function makeTableControlledDiagram() {
         return [[left_clean, left_dirty], [right_clean, right_dirty]];
     }
     */
-
+// ------------------------------AQUIIIIIIIIIIIIIIIIIII---------------------------
     function showPerceptAndAction(location, percept, action) {
         let locationMarker = location? 'right' : 'left';
         let perceptMarker = percept? 'dirty' : 'clean';
@@ -229,7 +236,7 @@ function makeTableControlledDiagram() {
                 let marker = d3.select(this).attr('data-action');
                 return marker == locationMarker + '-' + perceptMarker;
             })
-            .transition().duration(0.05 * STEP_TIME_MS)
+            .transition().duration(0.5 * STEP_TIME_MS)
             .style('background-color', colors.actionHighlight)
             .transition().duration(0.9 * STEP_TIME_MS)
             .style('background-color', colors.actionBackground);

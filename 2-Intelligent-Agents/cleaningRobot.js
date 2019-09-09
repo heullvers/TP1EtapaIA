@@ -21,20 +21,44 @@ class World {
             this.floors[this.location].dirty = false;
             break;
         case 'LEFT':
-            if(location == 3)
-                this.location = 2;
-            else if(location == 2)
-                this.location = 1;
-            else
+            if(location == 0)
                 this.location = 0;
+            else if(location == 1)
+                this.location = 0;
+            else if(location == 2)
+                this.location = 2;
+            else 
+                this.location = 2
             break;
         case 'RIGHT':
             if(location == 0)
                 this.location = 1;
             else if((location == 1))
-                this.location = 2;
-            else
+                this.location = 1;
+            else if(location == 2)
                 this.location = 3;
+            else 
+                this.location = 3
+            break;
+        case 'UP':
+            if(location == 0)
+                this.location = 0;
+            else if(location == 1)
+                this.location = 1;
+            else if(location == 2)
+                this.location = 0;
+            else 
+                this.location = 1;
+            break;
+        case 'DOWN':
+        if(location == 0)
+            this.location = 2;
+        else if(location == 1)
+            this.location = 3;
+        else if(location == 2)
+            this.location = 2;
+        else 
+            this.location = 3;
             break;
         }
 
@@ -47,8 +71,8 @@ class World {
 function reflexVacuumAgent(world) {
     if (world.floors[world.location].dirty) { return 'SUCK'; }
     else if (world.location == 0)           { return 'RIGHT'; }
-    else if (world.location == 1)           { return 'RIGHT'; }
-    else if (world.location == 2)           { return 'RIGHT'; }
+    else if (world.location == 1)           { return 'DOWN'; }
+    else if (world.location == 2)           { return 'UP'; }
     else if (world.location == 3)           { return 'LEFT'; }
 }
 
