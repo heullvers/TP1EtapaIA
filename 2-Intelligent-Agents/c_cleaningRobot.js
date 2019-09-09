@@ -94,12 +94,11 @@ function makeAgentControlledDiagram() {
 
     function update() {
         let location = diagram.world.location;
-        console.log(location)
         let percept = diagram.world.floors[location].dirty;
-        console.log(percept)
+        console.log("PERCEPT", percept)
         let action = reflexVacuumAgent(diagram.world);
-        console.log(action)
-        diagram.world.simulate(action);
+        //TESTAR PASSANDO O LOCATION NO PARAMETRO DO SIMULATE
+        diagram.world.simulate(action, location);
         renderWorld(diagram);
         renderAgentPercept(diagram, percept);
         renderAgentAction(diagram, action);

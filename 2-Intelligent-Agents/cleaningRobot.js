@@ -13,16 +13,28 @@ class World {
         this.floors[floorNumber].dirty = true;
     }
 
-    simulate(action) {
+    simulate(action, location) {
+        console.log("ACTION", action)
+        console.log("LOCATION", location)
         switch(action) {
         case 'SUCK':
             this.floors[this.location].dirty = false;
             break;
         case 'LEFT':
-            this.location = 0;
+            if(location == 3)
+                this.location = 2;
+            else if(location == 2)
+                this.location = 1;
+            else
+                this.location = 0;
             break;
         case 'RIGHT':
-            this.location = 1;
+            if(location == 0)
+                this.location = 1;
+            else if((location == 1))
+                this.location = 2;
+            else
+                this.location = 3;
             break;
         }
 
@@ -35,7 +47,9 @@ class World {
 function reflexVacuumAgent(world) {
     if (world.floors[world.location].dirty) { return 'SUCK'; }
     else if (world.location == 0)           { return 'RIGHT'; }
-    else if (world.location == 1)           { return 'LEFT'; }
+    else if (world.location == 1)           { return 'RIGHT'; }
+    else if (world.location == 2)           { return 'RIGHT'; }
+    else if (world.location == 3)           { return 'LEFT'; }
 }
 
 // Rules are defined in data, in a table indexed by [location][dirty]
