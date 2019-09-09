@@ -20,7 +20,7 @@ const colors = {
 function makeDiagram(selector) {
     let diagram = {}, world = new World(4);
     diagram.world = world;
-    diagram.xPosition = (floorNumber) => 50 + (floorNumber ) * 750 / (diagram.world.floors.length);
+    diagram.xPosition = (floorNumber) => 250 + (floorNumber%2 ) * 750 / (diagram.world.floors.length);
     diagram.yPosition = (floorNumber) => {
         if (floorNumber < 2) {
             return 210;
@@ -47,6 +47,7 @@ function makeDiagram(selector) {
         .attr('text-anchor', 'middle');
 
     diagram.floors = [];
+    // constroi cada piso (floor)
     for (let floorNumber = 0; floorNumber < world.floors.length; floorNumber++) {
         diagram.floors[floorNumber] =
             diagram.root.append('rect')
@@ -76,7 +77,7 @@ function renderWorld(diagram) {
     for (let floorNumber = 0; floorNumber < diagram.world.floors.length; floorNumber++) {
         diagram.floors[floorNumber].attr('class', diagram.world.floors[floorNumber].dirty? 'dirty floor' : 'clean floor');
     }
-    diagram.robot.style('transform', `translate(${diagram.xPosition(diagram.world.location)}px,100px)`);
+    diagram.robot.style('transform', `translate(${diagram.xPosition(diagram.world.location)}px,${diagram.yPosition(diagram.world.location) - 110}px)`);
 }
 
 function renderAgentPercept(diagram, dirty) {
